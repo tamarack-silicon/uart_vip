@@ -11,6 +11,8 @@ module uart_vip_tests_top;
 	initial begin
 		uvm_pkg::uvm_config_db#(virtual tamarack_uart_if)::set(null, "uvm_test_top.m_env.m_uart_agent_a", "uart_vif", uart_if_a);
 		uvm_pkg::uvm_config_db#(virtual tamarack_uart_if)::set(null, "uvm_test_top.m_env.m_uart_agent_b", "uart_vif", uart_if_b);
+		uvm_pkg::uvm_config_db#(integer)::set(null, "uvm_test_top.m_env.m_uart_agent_a", "baud_rate", 115200);		
+		uvm_pkg::uvm_config_db#(integer)::set(null, "uvm_test_top.m_env.m_uart_agent_b", "baud_rate", 115200);
 		uvm_pkg::run_test();
 	end
 

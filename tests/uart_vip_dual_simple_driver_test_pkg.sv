@@ -32,7 +32,8 @@ package uart_vip_dual_simple_driver_test_pkg;
 
 				finish_item(m_item);
 
-				#1;
+				#1ms;
+
 			end
 		endtask // body
 
@@ -52,6 +53,7 @@ package uart_vip_dual_simple_driver_test_pkg;
 
 			phase.raise_objection(phase);
 
+			#1ms;
 			m_seq.start(m_env.m_uart_agent_a.sequencer);
 
 			phase.drop_objection(phase);
