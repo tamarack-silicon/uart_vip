@@ -1,1 +1,6 @@
 uart_vip_tests_top.sv
+
+uart_vip_tests_env_pkg.sv
+uart_vip_single_base_test_pkg.sv
+uart_vip_dual_base_test_pkg.sv
+uart_vip_dual_simple_driver_test_pkg.sv
