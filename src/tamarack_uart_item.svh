@@ -24,6 +24,10 @@ class tamarack_uart_item extends uvm_sequence_item;
 		`uvm_field_int(parity_error, UVM_DEFAULT)
 	`uvm_object_utils_end
 
+	constraint c_data_mask {
+		(data >> length) == 0;
+	}
+
 endclass // tamarack_uart_item
 
 `endif

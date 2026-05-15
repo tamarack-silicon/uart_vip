@@ -23,12 +23,12 @@ package uart_vip_dual_simple_driver_test_pkg;
 
 				start_item(m_item);
 
-				if(!m_item.randomize()) begin
-					`uvm_error("UART_VIP_DUAL_SIMPLE_DRIVER_TEST", "Randomization Failed")
-				end
 				m_item.direction = TRANSMIT;
 				m_item.length = 8;
 				m_item.parity_error = 1'b0;
+				if(!m_item.randomize()) begin
+					`uvm_error("UART_VIP_DUAL_SIMPLE_DRIVER_TEST", "Randomization Failed")
+				end
 
 				finish_item(m_item);
 
