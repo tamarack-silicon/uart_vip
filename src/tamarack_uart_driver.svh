@@ -7,10 +7,28 @@ class tamarack_uart_driver extends uvm_driver#(tamarack_uart_item);
 
 	virtual tamarack_uart_if uart_vif;
 	integer	baud_rate;
+	tamarack_uart_data_order data_order;
+	integer data_bits;
+	integer	stop_bits;
 
 	function new(string name = "tamarack_uart_driver", uvm_component parent = null);
 		super.new(name, parent);
 	endfunction // new
+
+	function void update_config();
+		if(!uvm_config_db#(integer)::get(null, get_parent().get_full_name(), "baud_rate", baud_rate)) begin
+			`uvm_fatal("TAMARACK_UART_DRIVER", "Could not get baud_rate from config_db")
+		end
+		if(!uvm_config_db#(tamarack_uart_data_order)::get(null, get_parent().get_full_name(), "data_order", data_order)) begin
+			`uvm_fatal("TAMARACK_UART_DRIVER", "Could not get data_order from config_db")
+		end
+		if(!uvm_config_db#(integer)::get(null, get_parent().get_full_name(), "data_bits", data_bits)) begin
+			`uvm_fatal("TAMARACK_UART_DRIVER", "Could not get data_bits from config_db")
+		end
+		if(!uvm_config_db#(integer)::get(null, get_parent().get_full_name(), "stop_bits", stop_bits)) begin
+			`uvm_fatal("TAMARACK_UART_DRIVER", "Could not get stop_bits from config_db")
+		end
+	endfunction // update_config
 
 	virtual function void build_phase(uvm_phase phase);
 		super.build_phase(phase);
@@ -18,9 +36,7 @@ class tamarack_uart_driver extends uvm_driver#(tamarack_uart_item);
 		if(!uvm_config_db#(virtual tamarack_uart_if)::get(null, get_parent().get_full_name(), "uart_vif", uart_vif)) begin
 			`uvm_fatal("TAMARACK_UART_DRIVER", "Could not get virtual interface from config_db")
 		end
-		if(!uvm_config_db#(integer)::get(null, get_parent().get_full_name(), "baud_rate", baud_rate)) begin
-			`uvm_fatal("TAMARACK_UART_DRIVER", "Could not get baud rate from config_db")
-		end
+		update_config();
 	endfunction // build_phase
 
 	virtual task run_phase(uvm_phase phase);
@@ -31,18 +47,41 @@ class tamarack_uart_driver extends uvm_driver#(tamarack_uart_item);
 		uart_vif.tx = 1'b1;
 
 		forever begin
+			update_config();
+
 			seq_item_port.get_next_item(m_item);
 			`uvm_info("TAMARACK_UART_DRIVER", "Driving item:", UVM_HIGH)
 			m_item.print();
+			if(m_item.length != data_bits) begin
+				`uvm_error("TAMARACK_UART_DRIVER", $sformatf("m_item.length != data_bits, m_item.length = %0d, data_bits = %0d", m_item.length, data_bits))
+			end
 
+			// Start bit
+			`uvm_info("TAMARACK_UART_DRIVER", "Driving start bit, tx = 0", UVM_HIGH)
 			uart_vif.tx = 1'b0;
 			#(1s/baud_rate);
-			for(integer i = 0; i < m_item.length; i++) begin
-				uart_vif.tx = m_item.data[i];
+
+			// Data bits
+			if(data_order == TAMARACK_UART_VIP_DATA_ORDER_LSB_FIRST) begin
+				for(integer i = 0; i < data_bits; i++) begin
+					`uvm_info("TAMARACK_UART_DRIVER", $sformatf("Driving data bit %0d, tx = %0d", i, m_item.data[i]), UVM_HIGH)
+					uart_vif.tx = m_item.data[i];
+					#(1s/baud_rate);
+				end
+			end else begin
+				for(integer i = data_bits-1; i >= 0; i--) begin
+					`uvm_info("TAMARACK_UART_DRIVER", $sformatf("Driving data bit %0d, tx = %0d", i, m_item.data[i]), UVM_HIGH)
+					uart_vif.tx = m_item.data[i];
+					#(1s/baud_rate);
+				end
+			end
+
+			// Stop bits
+			for(integer i = 0; i < stop_bits; i++) begin
+				`uvm_info("TAMARACK_UART_DRIVER", $sformatf("Driving stop bit %0d, tx = 1", i), UVM_HIGH)
+				uart_vif.tx = 1'b1;
 				#(1s/baud_rate);
 			end
-			uart_vif.tx = 1'b1;
-			#(1s/baud_rate);
 
 			seq_item_port.item_done();
 		end

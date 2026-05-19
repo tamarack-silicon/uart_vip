@@ -23,7 +23,7 @@ package uart_vip_dual_simple_driver_test_pkg;
 
 				start_item(m_item);
 
-				m_item.direction = TRANSMIT;
+				m_item.direction = TAMARACK_UART_VIP_DIR_TRANSMIT;
 				m_item.length = 8;
 				m_item.parity_error = 1'b0;
 				if(!m_item.randomize()) begin

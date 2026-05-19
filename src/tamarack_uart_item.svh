@@ -2,9 +2,14 @@
 `define TAMARACK_UART_ITEM_SVH
 
 typedef enum bit {
-	TRANSMIT = 1'b0,
-	RECEIVE = 1'b1
+	TAMARACK_UART_VIP_DIR_TRANSMIT = 1'b0,
+	TAMARACK_UART_VIP_DIR_RECEIVE = 1'b1
 } tamarack_uart_dir;
+
+typedef enum bit {
+	TAMARACK_UART_VIP_DATA_ORDER_LSB_FIRST = 1'b0,
+	TAMARACK_UART_VIP_DATA_ORDER_MSB_FIRST = 1'b1
+} tamarack_uart_data_order;
 
 class tamarack_uart_item extends uvm_sequence_item;
 
@@ -14,7 +19,7 @@ class tamarack_uart_item extends uvm_sequence_item;
 
 	rand bit [15:0]   data;
 	tamarack_uart_dir direction;
-	integer		      length;
+	integer           length;
 	bit               parity_error;
 
 	`uvm_object_utils_begin(tamarack_uart_item)
