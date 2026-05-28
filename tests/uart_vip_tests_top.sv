@@ -15,6 +15,8 @@ module uart_vip_tests_top;
 		uvm_pkg::uvm_config_db#(integer)::set(null, "uvm_test_top.m_env.m_uart_agent_b", "baud_rate", 115200);
 		uvm_pkg::uvm_config_db#(tamarack_uart_agent_pkg::tamarack_uart_data_order)::set(null, "uvm_test_top.m_env.m_uart_agent_a", "data_order", tamarack_uart_agent_pkg::TAMARACK_UART_VIP_DATA_ORDER_LSB_FIRST);
 		uvm_pkg::uvm_config_db#(tamarack_uart_agent_pkg::tamarack_uart_data_order)::set(null, "uvm_test_top.m_env.m_uart_agent_b", "data_order", tamarack_uart_agent_pkg::TAMARACK_UART_VIP_DATA_ORDER_LSB_FIRST);
+		uvm_pkg::uvm_config_db#(tamarack_uart_agent_pkg::tamarack_uart_parity_type)::set(null, "uvm_test_top.m_env.m_uart_agent_a", "parity_type", tamarack_uart_agent_pkg::TAMARACK_UART_VIP_PARITY_ODD);
+		uvm_pkg::uvm_config_db#(tamarack_uart_agent_pkg::tamarack_uart_parity_type)::set(null, "uvm_test_top.m_env.m_uart_agent_b", "parity_type", tamarack_uart_agent_pkg::TAMARACK_UART_VIP_PARITY_ODD);
 		uvm_pkg::uvm_config_db#(integer)::set(null, "uvm_test_top.m_env.m_uart_agent_a", "data_bits", 8);
 		uvm_pkg::uvm_config_db#(integer)::set(null, "uvm_test_top.m_env.m_uart_agent_b", "data_bits", 8);
 		uvm_pkg::uvm_config_db#(integer)::set(null, "uvm_test_top.m_env.m_uart_agent_a", "stop_bits", 1);
