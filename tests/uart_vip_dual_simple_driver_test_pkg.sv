@@ -17,6 +17,11 @@ package uart_vip_dual_simple_driver_test_pkg;
 
 		virtual task body();
 			tamarack_uart_item m_item;
+			automatic integer data_bits;
+
+			if(!uvm_config_db#(integer)::get(null, "uvm_test_top", "data_bits", data_bits)) begin
+				`uvm_fatal("UART_VIP_DUAL_SIMPLE_DRIVER_TEST", "Could not get data_bits from config_db")
+			end
 
 			repeat(100) begin
 				m_item = tamarack_uart_item::type_id::create("m_item");
@@ -24,7 +29,7 @@ package uart_vip_dual_simple_driver_test_pkg;
 				start_item(m_item);
 
 				m_item.direction = TAMARACK_UART_VIP_DIR_TRANSMIT;
-				m_item.length = 8;
+				m_item.data_bits = data_bits;
 				m_item.parity_error = 1'b0;
 				if(!m_item.randomize()) begin
 					`uvm_error("UART_VIP_DUAL_SIMPLE_DRIVER_TEST", "Randomization Failed")
