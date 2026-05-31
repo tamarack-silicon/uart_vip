@@ -8,19 +8,19 @@ class tamarack_uart_item extends uvm_sequence_item;
 	endfunction // new
 
 	rand bit [15:0]   data;
+	integer           data_bits;
 	tamarack_uart_dir direction;
-	integer           length;
 	bit               parity_error;
 
 	`uvm_object_utils_begin(tamarack_uart_item)
 		`uvm_field_int(data, UVM_DEFAULT)
+		`uvm_field_int(data_bits, UVM_DEFAULT)
 		`uvm_field_enum(tamarack_uart_dir, direction, UVM_DEFAULT)
-		`uvm_field_int(length, UVM_DEFAULT)
 		`uvm_field_int(parity_error, UVM_DEFAULT)
 	`uvm_object_utils_end
 
 	constraint c_data_mask {
-		(data >> length) == 0;
+		(data >> data_bits) == 0;
 	}
 
 endclass // tamarack_uart_item

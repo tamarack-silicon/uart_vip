@@ -57,8 +57,8 @@ class tamarack_uart_driver extends uvm_driver#(tamarack_uart_item);
 			seq_item_port.get_next_item(m_item);
 			`uvm_info("TAMARACK_UART_DRIVER", "Driving item:", UVM_HIGH)
 			m_item.print();
-			if(m_item.length != data_bits) begin
-				`uvm_error("TAMARACK_UART_DRIVER", $sformatf("m_item.length != data_bits, m_item.length = %0d, data_bits = %0d", m_item.length, data_bits))
+			if(m_item.data_bits != data_bits) begin
+				`uvm_error("TAMARACK_UART_DRIVER", $sformatf("m_item.data_bits != data_bits, m_item.data_bits = %0d, data_bits = %0d", m_item.data_bits, data_bits))
 			end
 
 			// Start bit

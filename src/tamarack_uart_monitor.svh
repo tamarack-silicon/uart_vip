@@ -58,7 +58,7 @@ class tamarack_uart_monitor extends uvm_monitor;
 
 			m_item = tamarack_uart_item::type_id::create("uart_item");
 			m_item.direction = TAMARACK_UART_VIP_DIR_RECEIVE;
-			m_item.length = data_bits;
+			m_item.data_bits = data_bits;
 
 			// Start bit
 			#(1s/baud_rate);
